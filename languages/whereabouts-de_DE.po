@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Whereabouts v0.1.0\n"
+"Project-Id-Version: Whereabouts v0.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-09-07 20:47:08+0000\n"
+"PO-Revision-Date: 2014-09-15 22:29:38+0000\n"
 "Last-Translator: Florian Ziegler <mail@florianziegler.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -65,12 +65,12 @@ msgstr "<p class=\"whab-language-settings-hint\"><strong>Tipp:</strong> Du kanns
 msgid "Timezone"
 msgstr "Zeitzone"
 
-#: includes/whereabouts-dashboard.php:138
+#: includes/whereabouts-dashboard.php:139
 #@ whereabouts
 msgid "Timezone Name"
 msgstr "Zeitzonenname"
 
-#: includes/whereabouts-dashboard.php:144
+#: includes/whereabouts-dashboard.php:145
 #@ whereabouts
 msgid "Save Location"
 msgstr "Ort speichern"
@@ -131,32 +131,32 @@ msgstr "Sprache festlegen, in der Google das Ergebnis der Ortsanfrage ausgibt."
 msgid "API Request Language"
 msgstr "Sprache der API Abfrage"
 
-#: includes/whereabouts-settings-page.php:37
+#: includes/whereabouts-settings-page.php:40
 #@ whereabouts
 msgid "Select Language"
 msgstr "Sprache wählen"
 
-#: includes/whereabouts-settings-page.php:108
+#: includes/whereabouts-settings-page.php:111
 #@ whereabouts
 msgid "In order to use your Google API Key, you must enable the <strong>Geocoding</strong> and <strong>Time Zone</strong> APIs in the <a href=\"https://developers.google.com/console/\">Google Developer Console</a>. The plugin will send a test request to the api to validate your key."
 msgstr "Um deinen Google API Schlüssel zu verwenden, muss dieser für die Verwendung der <strong>Geocoding</strong> und <strong>Time Zone</strong> API in der <a href=\"https://developers.google.com/console/\">Google Developer Console</a> freigegeben sein. Das Plugin sendet eine Testanfrage an die API, um den angegebenen Schlüssel zu bestätigen."
 
-#: includes/whereabouts-settings-page.php:109
+#: includes/whereabouts-settings-page.php:112
 #@ whereabouts
 msgid "Google API Key"
 msgstr "Google API Schlüssel"
 
-#: includes/whereabouts-settings-page.php:109
+#: includes/whereabouts-settings-page.php:112
 #@ whereabouts
 msgid "optional"
 msgstr "optional"
 
-#: includes/whereabouts-settings-page.php:112
+#: includes/whereabouts-settings-page.php:115
 #@ whereabouts
 msgid "Save Settings"
 msgstr "Einstellungen speichern"
 
-#: includes/whereabouts-settings.php:77
+#: includes/whereabouts-settings.php:76
 #@ whereabouts
 msgid "This language is not supported."
 msgstr "Diese Sprache wird nicht unterstützt."
@@ -166,44 +166,49 @@ msgstr "Diese Sprache wird nicht unterstützt."
 msgid "Shows current location and timezone."
 msgstr "Zeigt derzeitigen Aufenthaltsort und Zeitzone an."
 
-#: includes/whereabouts-widget.php:66
+#: includes/whereabouts-widget.php:68
 #@ whereabouts
 msgid "Title:"
 msgstr "Titel:"
 
-#: includes/whereabouts-widget.php:71
+#: includes/whereabouts-widget.php:73
 #@ whereabouts
 msgid "Link location to Google Maps"
 msgstr "Aufenthaltsort mit Google Maps verlinken"
 
-#: includes/whereabouts-widget.php:75
+#: includes/whereabouts-widget.php:77
 #@ whereabouts
 msgid "Show time zone name"
 msgstr "Zeitzonenname anzeigen"
 
-#: includes/whereabouts-settings-page.php:109
+#: includes/whereabouts-settings-page.php:112
 #@ whereabouts
 msgid "Validate API Key"
 msgstr "API Schlüssel validieren"
 
-#: includes/whereabouts-settings-page.php:175
+#: includes/whereabouts-settings-page.php:181
 #@ whereabouts
 msgid "You key is valid."
 msgstr "Dein Schlüssel ist gültig."
 
-#: includes/whereabouts-settings-page.php:179
 #: includes/whereabouts-settings-page.php:185
+#: includes/whereabouts-settings-page.php:191
 #@ whereabouts
 msgid "Your key is not valid."
 msgstr "Dein Schlüssel ist ungültig."
 
-#: includes/whereabouts-settings-page.php:189
+#: includes/whereabouts-settings-page.php:195
 #@ whereabouts
 msgid "Validation server could not be reached. Try again later."
 msgstr "Der Validierungsserver ist nicht erreichbar. Versuche es später noch einmal."
 
-#: includes/whereabouts-settings.php:86
+#: includes/whereabouts-settings.php:85
 #@ whereabouts
 msgid "The key you provided is not valid."
 msgstr "Der Schlüssel ist nicht gültig."
+
+#: includes/whereabouts-widget.php:80
+#@ whereabouts
+msgid "Time Format"
+msgstr "Zeitformat"
 
