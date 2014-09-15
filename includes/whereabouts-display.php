@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) OR exit;
  * @since 0.1.0
  */
 
-function whereabouts_display_widget( $link_location = false, $show_tz = false ) {
+function whereabouts_display_widget( $link_location = false, $show_tz = false, $time_format = 'H:i' ) {
 
     $location = get_option( 'whab_location_data' );
 
@@ -36,7 +36,7 @@ function whereabouts_display_widget( $link_location = false, $show_tz = false ) 
     $output .= '<dd class="whab-time">';
 
     $current_time = time();
-    $current_time = date( 'H:i', $current_time + $offset );
+    $current_time = date( $time_format, $current_time + $offset );
 
     $output .= $current_time;
 

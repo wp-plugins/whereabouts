@@ -30,12 +30,13 @@ class Whereabouts extends WP_Widget {
             $title = apply_filters( 'widget_title', $instance['title'] );
             $link_location = apply_filters( 'widget_title', $instance['link_location'] );
             $show_tz = apply_filters( 'widget_title', $instance['show_tz'] );
+            $time_format = apply_filters( 'widget_title', $instance['time_format'] );
 
             echo $args['before_widget'];
             if ( ! empty( $title ) ) {
                 echo $args['before_title'] . $title . $args['after_title'];
             }
-            echo whereabouts_display_widget( $link_location, $show_tz );
+            echo whereabouts_display_widget( $link_location, $show_tz, $time_format );
             echo $args['after_widget'];
 
         }
@@ -48,13 +49,14 @@ class Whereabouts extends WP_Widget {
         $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
         $instance['link_location'] = ( ! empty( $new_instance['link_location'] ) ) ? strip_tags( $new_instance['link_location'] ) : '';
         $instance['show_tz'] = ( ! empty( $new_instance['show_tz'] ) ) ? strip_tags( $new_instance['show_tz'] ) : '';
+        $instance['time_format'] = ( ! empty( $new_instance['time_format'] ) ) ? strip_tags( $new_instance['time_format'] ) : 'H:i';
         return $instance;
 
 	}
 
     // Output admin widget options form
 	function form( $instance ) {
-        
+
         if ( isset( $instance['title'] ) ) {
             $title = $instance['title'];
         }
@@ -73,6 +75,12 @@ class Whereabouts extends WP_Widget {
         <p>
             <input id="<?php echo $this->get_field_id( 'show_tz' ); ?>" name="<?php echo $this->get_field_name( 'show_tz' ); ?>" type="checkbox" value="1"<?php if ( isset( $instance['show_tz'] ) AND $instance['show_tz'] == true ) { echo 'checked="checked"'; } ?> />
             <label for="<?php echo $this->get_field_id( 'show_tz' ); ?>"><?php _e( 'Show time zone name', 'whereabouts' ); ?></label> 
+        </p>
+        <p>
+        	<strong><?php _e( 'Time Format', 'whereabouts' ); ?></strong><br />
+            <span class="whab-pair"><input type="radio" name="<?php echo $this->get_field_name( 'time_format' ); ?>" id="<?php echo $this->get_field_id( 'time_format_H_i' ); ?>" value="H:i"<?php if ( ! isset( $instance['time_format'] ) OR ( isset( $instance['time_format'] ) AND $instance['time_format'] == 'H:i' ) ) { echo 'checked="checked"'; } ?> /> <label for="<?php echo $this->get_field_id( 'time_format_H_i' ); ?>"><?php echo date( 'H:i' ); ?></label></span>
+            <span class="whab-pair"><input type="radio" name="<?php echo $this->get_field_name( 'time_format' ); ?>" id="<?php echo $this->get_field_id( 'time_format_g_i_a' ); ?>" value="g:i a"<?php if ( isset( $instance['time_format'] ) AND $instance['time_format'] == 'g:i a' ) { echo 'checked="checked"'; } ?> /> <label for="<?php echo $this->get_field_id( 'time_format_g_i_a' ); ?>"><?php echo date( 'g:i a' ); ?></label></span>
+        	<span class="whab-pair"><input type="radio" name="<?php echo $this->get_field_name( 'time_format' ); ?>" id="<?php echo $this->get_field_id( 'time_format_g_i_A' ); ?>" value="g:i A"<?php if ( isset( $instance['time_format'] ) AND $instance['time_format'] == 'g:i A' ) { echo 'checked="checked"'; } ?> /> <label for="<?php echo $this->get_field_id( 'time_format_g_i_A' ); ?>"><?php echo date( 'g:i A' ); ?></label></span>
         </p>
         <?php
 	}

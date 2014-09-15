@@ -3,7 +3,7 @@ Contributors: florianziegler
 Tags: location, timezone, travel, digitalnomad, dashboard, widget
 Requires at least: 3.9
 Tested up to: 4.0
-Stable tag: trunk
+Stable tag: 0.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,6 +58,8 @@ Please note: There is **no extra styling** for the widget. You can however do it
     <dd class="whab-time">12:34 <span class="whab-timezone-name">...</span></dd>
 </dl>`
 
+You must save a location, otherwise the widget won't be displayed.
+
 
 == Screenshots ==
 
@@ -67,5 +69,11 @@ Please note: There is **no extra styling** for the widget. You can however do it
 
 == Changelog ==
 
-= 0.1.0 =
+= 0.3.0 =
+* You can now choose the time format in which the local time is displayed
+
+= 0.2.0 =
 * Whereabouts is live
+
+= 0.1.0 =
+* Somehow this got skipped...
