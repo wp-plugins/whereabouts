@@ -32,6 +32,10 @@ class Whereabouts extends WP_Widget {
             $show_tz = apply_filters( 'widget_title', $instance['show_tz'] );
             $time_format = apply_filters( 'widget_title', $instance['time_format'] );
 
+            if ( empty( $time_format ) ) {
+                $time_format = 'H:i';
+            }
+
             echo $args['before_widget'];
             if ( ! empty( $title ) ) {
                 echo $args['before_title'] . $title . $args['after_title'];
