@@ -1,5 +1,5 @@
-<?php
-defined( 'ABSPATH' ) OR exit;
+<?php defined( 'ABSPATH' ) OR exit;
+
 /**
  * @package whereabouts
  * @since 0.1.0
@@ -15,9 +15,7 @@ defined( 'ABSPATH' ) OR exit;
 add_action( 'admin_init', 'whereabouts_register_settings' );
 
 function whereabouts_register_settings() {
-    // location data
-    register_setting( 'whab_location_data', 'whab_location_data', 'whereabouts_location_validate' );
-    // plugin settings
+    // Plugin settings
     register_setting( 'whab_settings', 'whab_settings', 'whereabouts_settings_validate' );
 }
 
@@ -28,11 +26,11 @@ function whereabouts_register_settings() {
  * @since 0.1.0
  */
 
-function whereabouts_location_validate( $args ) {
+function whereabouts_validate_save_location( $args ) {
 
     if( ! isset( $args['location_name'] ) OR empty( $args['location_name'] ) ) {
         // Add settings error if location field is empty
-        add_settings_error( 'location_name', 'whereabouts_empt_location', 'Please enter a location.', $type = 'error' );
+        $error = __( 'Please enter a location.', 'whereabouts' );
     } else {
         // Sanitize location name before saving
         $args['location_name'] = sanitize_text_field( $args['location_name'] );
@@ -47,7 +45,33 @@ function whereabouts_location_validate( $args ) {
     // Sanitize geo before saving
     $args['geo'] = sanitize_text_field( $args['geo'] );
 
-    return $args;
+    // If there was no error,  save location info to the user meta and display a message
+    if ( ! isset( $error ) ) {
+
+        // Get current user id
+        $current_user = wp_get_current_user();
+        if ( !( $current_user instanceof WP_User ) ) { return; }
+        $options = get_user_meta( $current_user->ID, 'whab_location_data', true );
+
+        // Check if location field is already in there
+        $location = get_user_meta( $current_user->ID, 'whab_location_data', true );
+
+        // If location is given, do the update
+        if ( isset( $location ) AND ! empty( $location ) ) {
+            update_user_meta( $current_user->ID, 'whab_location_data', $args );
+        }
+        // If user has not saved a location yet, create the meta
+        else {
+            add_user_meta( $current_user->ID, 'whab_location_data', $args, true );
+        }
+        
+        // Tell the user, that it worked!
+        echo '<div class="whab-message whab-success">' . __( 'Location saved.', 'whereabouts') . '</div>';
+    }
+    else {
+        // Display error
+        echo '<div class="whab-message whab-error">' . $error . '</div>';
+    }
 
 }
 
@@ -88,7 +112,7 @@ function whereabouts_settings_validate( $args ) {
             $args['google-maps-api-key'] = sanitize_text_field( $args['google-maps-api-key'] );
         }
 
-        // Don't need to save that
+        // We don't need to save that
         unset( $args['key-validation'] );                         
     }
 

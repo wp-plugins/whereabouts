@@ -1,5 +1,5 @@
-<?php
-defined( 'ABSPATH' ) OR exit;
+<?php defined( 'ABSPATH' ) OR exit;
+
 /**
  * @package Whereabouts
  * @since 0.1.0
@@ -20,12 +20,11 @@ function whereabouts_load_menu_page() {
         <?php
             settings_fields( 'whab_settings' );
             $options = get_option( 'whab_settings' );
-        ?>
-        <?php
+
             if ( isset( $options['use_google'] ) && $options['use_google'] == true ) { $checked = ' checked="checked"'; } else { $checked = ''; }
             ?>
             <p><input type="checkbox" id="whab-use-google" name="whab_settings[use_google]" value="1"<?php echo $checked; ?> /> <label class="after" for="whab-use-google"><strong><?php _e( 'Use Google to get location data', 'whereabouts' ); ?></strong></label></p>
-            <p><?php _e( 'If you check this box, the Whereabouts plugin will sent a request to the Google Geocoding API using the content of the location input field in order to retrieve information about the given location. The time zone will be set for you automatically and you have the option to use the official location name provided by Google.', 'whereabouts' ); ?></p>
+            <p><?php _e( 'If you check this box, the Whereabouts plugin will send a request to the Google Geocoding API using the content of the location input field in order to retrieve information about the given location. The time zone will be set for you automatically and you have the option to use the official location name provided by Google.', 'whereabouts' ); ?></p>
             <hr />
             <p><?php _e( 'Set the language in which Google returns the result of your location request', 'whereabouts' ); ?>:</p>
             <p><label for="language"><strong><? _e( 'API Request Language', 'whereabouts'); ?></strong></label>
@@ -106,7 +105,6 @@ function whereabouts_load_menu_page() {
                 ?>
                 </select>
             </p>
-
             <hr />
             <p><?php _e( 'In order to use your Google API Key, you must enable the <strong>Geocoding</strong> and <strong>Time Zone</strong> APIs in the <a href="https://developers.google.com/console/">Google Developer Console</a>. The plugin will send a test request to the api to validate your key.', 'whereabouts' ); ?></p>
             <p><label for="google-maps-api-key"><strong><?php _e ('Google API Key', 'whereabouts' ); ?></strong> (<?php _e( 'optional', 'whereabouts' ); ?>)</label> <input type="text" name="whab_settings[google-maps-api-key]" id="google-maps-api-key" value="<?php if ( isset( $options['google-maps-api-key'] ) && $options['google-maps-api-key'] != '' ) { echo $options['google-maps-api-key']; } ?>" /> <span class="whab-loading"><span>loading</span></span> <input type="submit" class="button secondary" id="whab-validate-key" name="" value="<?php _e( 'Validate API Key', 'whereabouts' ); ?>"></p>

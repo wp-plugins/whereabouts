@@ -1,6 +1,6 @@
-<?php
-defined( 'ABSPATH' ) OR exit;
-/* 
+<?php defined( 'ABSPATH' ) OR exit;
+
+/**
  * @package Whereabouts
  * @since 0.1.0
  */
@@ -12,34 +12,45 @@ defined( 'ABSPATH' ) OR exit;
  * @since 0.1.0
  */
 
-class Whereabouts extends WP_Widget {
+class Whereabouts_Widget extends WP_Widget {
 
     // Instantiate parent object
-	function Whereabouts() {
-		parent::__construct( 'whereabouts_widget', 'Whereabouts', array( 'description' => __( 'Shows current location and timezone.', 'whereabouts' ) ) );
+	function Whereabouts_Widget() {
+
+        $widget_slug = 'whereabouts_user_widget';
+
+		parent::__construct( $widget_slug, 'Whereabouts', array( 'description' => __( 'Shows current location and timezone.', 'whereabouts' ) ) );
 	}
 
     // Front end display of widget
 	function widget( $args, $instance ) {
 
-        $location = get_option( 'whab_location_data' );
-        
-        // Only display widget if location is set
-        if ( ! empty( $location['location_name'] ) ) {
-
-            $title = apply_filters( 'widget_title', $instance['title'] );
-            $link_location = apply_filters( 'widget_title', $instance['link_location'] );
-            $show_tz = apply_filters( 'widget_title', $instance['show_tz'] );
-            $time_format = apply_filters( 'widget_title', $instance['time_format'] );
-
-            echo $args['before_widget'];
-            if ( ! empty( $title ) ) {
-                echo $args['before_title'] . $title . $args['after_title'];
-            }
-            echo whereabouts_display_widget( $link_location, $show_tz, $time_format );
-            echo $args['after_widget'];
-
+        if ( isset ( $instance['user'] ) AND !empty( $instance['user'] ) ) {
+            $user = $instance['user'];
         }
+        else {
+            $user = false;
+        }
+
+        $title = apply_filters( 'widget_title', $instance['title'] );
+        $link_location = apply_filters( 'widget_title', $instance['link_location'] );
+        $show_tz = apply_filters( 'widget_title', $instance['show_tz'] );
+        $time_format = apply_filters( 'widget_title', $instance['time_format'] );
+
+        // Set standard time format, if none is set
+        if ( empty( $time_format ) ) {
+            $time_format = 'H:i';
+        }
+
+        // Echo widget
+        echo $args['before_widget'];
+        if ( ! empty( $title ) ) {
+            echo $args['before_title'] . $title . $args['after_title'];
+        }
+        echo whereabouts_display_location( $link_location, $show_tz, $time_format, $user );
+        echo $args['after_widget'];
+
+        
 	}
 
 	// Save widget options    
@@ -47,6 +58,7 @@ class Whereabouts extends WP_Widget {
 
         $instance = array();
         $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+        $instance['user'] = ( ! empty( $new_instance['user'] ) ) ? strip_tags( $new_instance['user'] ) : '';
         $instance['link_location'] = ( ! empty( $new_instance['link_location'] ) ) ? strip_tags( $new_instance['link_location'] ) : '';
         $instance['show_tz'] = ( ! empty( $new_instance['show_tz'] ) ) ? strip_tags( $new_instance['show_tz'] ) : '';
         $instance['time_format'] = ( ! empty( $new_instance['time_format'] ) ) ? strip_tags( $new_instance['time_format'] ) : 'H:i';
@@ -57,17 +69,48 @@ class Whereabouts extends WP_Widget {
     // Output admin widget options form
 	function form( $instance ) {
 
+        $settings = get_option( 'whab_settings' );
+
+        // Set title variable, if it is not saved
         if ( isset( $instance['title'] ) ) {
             $title = $instance['title'];
         }
         else {
             $title = '';
         }
+        // Set user variable, if it is not saved
+        if ( isset( $instance['user'] ) ) {
+            $user = $instance['user'];
+        }
+        else {
+            $user = '';
+        }
+
+        // Display warning if user has not his/her location yet.
+        if ( $user AND !empty( $user ) ) {
+            $location_exists = get_user_meta( $user, 'whab_location_data', true );
+            if ( ! $location_exists ) {
+                $user_data = get_userdata( $user );
+                echo '<p><strong style="color: #c00;">' . sprintf( __('This widget won\'t be displayed until %s saved his/her location.', 'whereabouts'), $user_data->display_name ) . '</strong></p>';
+            }
+        }
         ?>
         <p>
             <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'whereabouts' ); ?></label> 
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
         </p>
+        <?php
+            // Add user select box, do choose which user should be displayed in the widget
+            echo '<p class="whab_widget_user_select"><label for="user">' . __( 'Show location of this user:', 'whereabouts' ) . '</label>';
+
+            if ( $user AND !empty( $user ) ) {
+                wp_dropdown_users( array( 'name' => $this->get_field_name( 'user' ), 'selected' => $user ) );
+            }
+            else {
+                wp_dropdown_users( array( 'name' => $this->get_field_name( 'user' ) ) );                
+            }
+            echo '</p>';
+        ?>
         <p>
             <input id="<?php echo $this->get_field_id( 'link_location' ); ?>" name="<?php echo $this->get_field_name( 'link_location' ); ?>" type="checkbox" value="1"<?php if ( isset( $instance['link_location'] ) AND $instance['link_location'] == true ) { echo 'checked="checked"'; } ?> />
             <label for="<?php echo $this->get_field_id( 'link_location' ); ?>"><?php _e( 'Link location to Google Maps', 'whereabouts' ); ?></label> 
@@ -96,7 +139,7 @@ class Whereabouts extends WP_Widget {
 add_action( 'widgets_init', 'whereabouts_register_widgets' );
 
 function whereabouts_register_widgets() {
-	register_widget( 'Whereabouts' );
+	register_widget( 'Whereabouts_Widget' );
 }
 
 ?>

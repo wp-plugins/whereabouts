@@ -1,5 +1,5 @@
-<?php
-defined( 'ABSPATH' ) OR exit;
+<?php defined( 'ABSPATH' ) OR exit;
+
 /**
  * @package Whereabouts
  * @since 0.1.0
@@ -15,10 +15,15 @@ defined( 'ABSPATH' ) OR exit;
 add_action( 'wp_dashboard_setup', 'whereabouts_add_dashboard_widget' );
 
 function whereabouts_add_dashboard_widget() {
+    
+    $settings = get_option( 'whab_settings' );
+
+    $current_user = wp_get_current_user();
+    if ( !( $current_user instanceof WP_User ) ) { return; }
 
 	wp_add_dashboard_widget(
         'whereabouts-dashboard-widget',
-        'Whereabouts',
+        'Whereabouts (' . $current_user->display_name . ')',
         'whereabouts_build_dashboard_widget'
     );	
 }
@@ -32,14 +37,29 @@ function whereabouts_add_dashboard_widget() {
 
 function whereabouts_build_dashboard_widget() { ?>
 
-    <form method="post" action="options.php">
-        
     <?php
-        // Set and load location information, load plugin settings
-        settings_fields( 'whab_location_data' );
-        $options = get_option( 'whab_location_data' );
+    // Validate & save $_POST data, when new location info was submitted.
+    if ( isset( $_REQUEST['whab_location_data'] ) ) {
+        $args = $_REQUEST['whab_location_data'];
+        whereabouts_validate_save_location( $args );
+    }
+    
+    ?>
+
+    <form method="post" action="">
+
+    <?php
+        // Get a nonce field for verifying purposes.
+        wp_nonce_field();
+
+        // Load plugin settings
         $settings = get_option( 'whab_settings' );
-        
+
+        // Load location data from the current user
+        $current_user = wp_get_current_user();
+        if ( !( $current_user instanceof WP_User ) ) { return; }
+        $location = get_user_meta( $current_user->ID, 'whab_location_data', true );
+
         // If the plugin is set to use Google, insert maps api script and map canvas
         if ( isset( $settings['use_google'] ) AND $settings['use_google'] == true ) { ?>
             <script src="//maps.googleapis.com/maps/api/js?v=3.exp"></script>
@@ -56,7 +76,7 @@ function whereabouts_build_dashboard_widget() { ?>
             
         // Add location input field ?>
         <p class="whab-location-input-wrapper"><label for="whab-location-name"><?php _e( 'Enter your current location', 'whereabouts' ); ?></label>
-            <input type="text" name="whab_location_data[location_name]" id="whab-location-name" value="<?php if ( isset( $options['location_name'] ) && $options['location_name'] != '' ) { echo $options['location_name']; } else { echo ''; } ?>" />
+            <input type="text" name="whab_location_data[location_name]" id="whab-location-name" value="<?php if ( isset( $location['location_name'] ) && $location['location_name'] != '' ) { echo $location['location_name']; } else { echo ''; } ?>" />
         
     <?php // If enabled, add 'get location data' button. Also: add the info box, that shows the full location name
         if ( isset( $settings['use_google'] ) AND $settings['use_google'] == true ) { ?>
@@ -123,7 +143,7 @@ function whereabouts_build_dashboard_widget() { ?>
                 );
 
                 // If a time zone is already set, let's load it. If not: show UTC+0
-                if ( isset( $options['utc_difference'] ) && $options['utc_difference'] != '' ) { $selected = $options['utc_difference']; } else { $selected = '0'; }
+                if ( isset( $location['utc_difference'] ) && $location['utc_difference'] != '' ) { $selected = $location['utc_difference']; } else { $selected = '0'; }
 
                 // Generate the options
                 foreach( $timezones as $key => $value ) {
@@ -136,10 +156,10 @@ function whereabouts_build_dashboard_widget() { ?>
             </select>
         </p>
         <?php // Add time zone name input field ?>
-        <p class="whab-col-75"><label for="whab-timezone-name"><?php _e( 'Timezone Name', 'whereabouts' ); ?></label> <input type="text" name="whab_location_data[timezone_name]" id="whab-timezone-name" value="<?php if ( isset( $options['timezone_name'] ) && $options['timezone_name'] != '' ) { echo $options['timezone_name']; } else { echo ''; } ?>" /></p>
+        <p class="whab-col-75"><label for="whab-timezone-name"><?php _e( 'Timezone Name', 'whereabouts' ); ?></label> <input type="text" name="whab_location_data[timezone_name]" id="whab-timezone-name" value="<?php if ( isset( $location['timezone_name'] ) && $location['timezone_name'] != '' ) { echo $location['timezone_name']; } else { echo ''; } ?>" /></p>
 
         <?php // Add hidden geo data input field ?>
-        <input type="hidden" name="whab_location_data[geo]" id="whab-geo" value="<?php if ( isset( $options['geo'] ) && $options['geo'] != '' ) { echo $options['geo']; } else { echo ''; } ?>" />
+        <input type="hidden" name="whab_location_data[geo]" id="whab-geo" value="<?php if ( isset( $location['geo'] ) && $location['geo'] != '' ) { echo $location['geo']; } else { echo ''; } ?>" />
 
         <?php // Add save button ?>
         <p class="whab-save"><input type="submit" name="whab_save_location" id="whab-save-location" value="<?php _e( 'Save Location', 'whereabouts'); ?>" class="button button-primary" /></p>
@@ -161,8 +181,12 @@ function whereabouts_build_dashboard_widget() { ?>
  */
 
 function whereabouts_action_javascript() {
-        
-    $options = get_option( 'whab_location_data' );
+    
+    $settings = get_option( 'whab_settings' );
+
+    $current_user = wp_get_current_user();
+    if ( !( $current_user instanceof WP_User ) ) { return; }
+    $options = get_user_meta( $current_user->ID, 'whab_location_data', true );
     
     // Load language form the settings, use english if not set
     $settings = get_option( 'whab_settings' );

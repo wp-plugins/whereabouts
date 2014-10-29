@@ -150,6 +150,14 @@
   overflow: hidden;
   clip: rect(0 0 0 0);
 }
+#whereabouts-dashboard-widget .whab-success {
+  position: relative;
+  margin: -2px 0 10px 0;
+  padding: 15px 20px;
+  color: #2f530e;
+  background-color: #a0e463;
+  border-radius: 3px;
+}
 #whereabouts-dashboard-widget .whab-error {
   position: relative;
   margin: -2px 0 10px 0;
@@ -301,4 +309,8 @@
 .widget-content .whab-pair {
   margin: 0 20px 0 0;
   white-space: nowrap;
+}
+
+.whab_widget_user_select label {
+  display: block;
 }
