@@ -7,6 +7,7 @@ Stable tag: 0.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
+
 Users can set their current location via the WordPress dashboard. A widget displays the location and the corresponding time (zone).
 
 == Description ==
