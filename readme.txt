@@ -2,16 +2,14 @@
 Contributors: florianziegler
 Tags: location, timezone, travel, digitalnomad, nomad, dashboard, widget, user, users, usermeta, meta, shortcode
 Requires at least: 3.9
-Tested up to: 4.1
-Stable tag: 0.5.6
+Tested up to: 4.1.1
+Stable tag: 0.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Users can set their current location via the WordPress dashboard. A widget displays the location and the corresponding time (zone).
 
 == Description ==
-
-**Please read the FAQ for information about updating from version 0.3.0**
 
 Each user can save his/her current location and the corresponding time (zone). The information is stored as user meta data.
 
@@ -23,7 +21,11 @@ You can - of course - add multiple widgets to show more than one user/location.
 Each user can comfortably set her/his current location directly on the WordPress dashboard.
 
 = A little help from Google =
-Activate the use of the Google Geocoding and Timezone API in the settings: The Plugin will then set the time zone of your whereabouts automatically, when entering a new location.
+Activate the use of the Google Geocoding and Timezone API in the settings:
+
+You can then use the browser's geolocation API to determine your location, and the Plugin will automatically fetch the time zone of your whereabouts.
+
+Want to use another location? Just type in a location name and the plugin will get all the relevant information for you.
 
 You can also set the language in which the results of the api requests are returned.
 
@@ -32,7 +34,7 @@ You can also set the language in which the results of the api requests are retur
 * WordPress 3.9.2
 
 = Support =
-Send a friendly email?
+* [Open a new topic here](https://wordpress.org/support/plugin/whereabouts)
 
 = Website =
 * [Whereabouts](http://florianziegler.de/whereabouts)
@@ -112,6 +114,10 @@ This will change the html output to:
 
 == Frequently Asked Questions ==
 
+= Why am I not getting any results when I use my browser's geolocation api? =
+
+Usually it is a privacy issue: Make sure your browser and your website are allowed to use the location functionality of your device (eg. your smartphone). In general these settings are found in your device's privacy or location settings.
+
 = Upgrade from version 0.3.0 =
 
 When you upgrade from 0.3.0 to a newer version, you have to (re) enter you location and (re) add the Whereabouts widget.
@@ -129,6 +135,10 @@ From version 0.4.0 (or newer) the location is saved _per user_. You can choose t
 
 
 == Changelog ==
+
+= 0.6.0 =
+
+* You can now use the browser's geolocation API to set your current location.
 
 = 0.5.6 =
  
